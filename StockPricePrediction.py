@@ -33,6 +33,10 @@ for subdir, dirs, files in os.walk(directory):
             stock = file
             fileName = os.path.join(subdir, file)
             ticker = stock.strip('.csv')
+            if 'weekly' in subdir:
+                print("weekly")
+            else :
+                print("daily")
 
             ###################
             # IMPORTING DATASET
@@ -53,7 +57,10 @@ for subdir, dirs, files in os.walk(directory):
             plt.plot(obs, HLC_avg, 'b', label = 'HLC avg')
             plt.plot(obs, close_val, 'g', label = 'Closing price')
             plt.legend(loc = 'upper left')
-            plt.savefig(temp + '/stock-data-charts/' + ticker + '.png')
+            if 'weekly' in subdir:
+                plt.savefig(temp + '/stock-data-charts/weekly_' + ticker + '.png')
+            else:
+                plt.savefig(temp + '/stock-data-charts/daily_' + ticker + '.png')
             #plt.show()
             plt.close()
             #
@@ -139,7 +146,11 @@ for subdir, dirs, files in os.walk(directory):
             plt.annotate("Last Day Value: "+ str(round(np.ndarray.item(last_val),2)) + "\nNext Day Value: " + str(round(np.ndarray.item(last_val*next_val),2)), xy=(0.05, 0.05), xycoords='axes fraction')
             #need to add value of next day prediction and data
             #need to add RMSE for next days
-            plt.savefig(temp + '/stock-predict-charts/' + ticker + '.png')
+            if 'weekly' in subdir:
+                plt.savefig(temp + '/stock-predict-charts/weekly_' + ticker + '.png')
+            else:
+                plt.savefig(temp + '/stock-predict-charts/daily_' + ticker + '.png')
+            #plt.savefig(temp + '/stock-predict-charts/' + ticker + '.png')
             plt.close()
             #plt.show()
 
