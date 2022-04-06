@@ -25,4 +25,12 @@ for filename in os.listdir(directory):
     # display data to verify it worked properly
     print("\nCSV Data after deleting the column 'Adj Close':\n")
     print(data)
+
+    #sort data by date
+    data['Date'] = pd.to_datetime(data.Date, infer_datetime_format=True)
+    #pd.display(data.head())
+
+    data.sort_values(by='Date', ascending=False, inplace=True)
+    #pd.display(data.head())
+
     data.to_csv(f, index=False)
