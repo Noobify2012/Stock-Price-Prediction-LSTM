@@ -43,8 +43,8 @@ for subdir, dirs, files in os.walk(directory):
             # IMPORTING DATASET
             #dataset = pd.read_csv('apple_share_price.csv', usecols=[1,2,3,4])
             dataset = pd.read_csv(fileName, usecols=[1,2,3,4])
-            if 'weekly' in subdir:
-                dataset = dataset.dropna()
+            #if 'weekly' in subdir:
+            dataset = dataset.dropna()
             dataset = dataset.reindex(index = dataset.index[::-1])
 
             # # CREATING OWN INDEX FOR FLEXIBILITY
@@ -68,12 +68,15 @@ for subdir, dirs, files in os.walk(directory):
             plt.close()
             #
             # PREPARATION OF TIME SERIES DATASET
+            #len of OHLC_avg is the number of data points
             OHLC_avg = np.reshape(OHLC_avg.values, (len(OHLC_avg),1)) # 1664
             scaler = MinMaxScaler(feature_range=(0, 1))
             OHLC_avg = scaler.fit_transform(OHLC_avg)
             #
             # TRAIN-TEST SPLIT
-            train_OHLC = int(len(OHLC_avg) * 0.75)
+            #train_OHLC = int(len(OHLC_avg) * 0.75)
+            #train up until the last week of the test data
+            train_OHLC = int(len(OHLC_avg) - 7)
             test_OHLC = len(OHLC_avg) - train_OHLC
             train_OHLC, test_OHLC = OHLC_avg[0:train_OHLC,:], OHLC_avg[train_OHLC:len(OHLC_avg),:]
             #
