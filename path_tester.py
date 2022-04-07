@@ -26,6 +26,7 @@ with open(tickerfile) as csv_file:
     print(f'Processed {line_count} lines.')
 print(tickerSet)
 # tickerset = pd.read_csv(tickerfile, usecols=[0,1])
+#get the weekly interval data
 for ticker in tickerSet:
     if ticker != 'Ticker' or ticker != 'Index':
         print('current ticker: ', ticker)
@@ -36,6 +37,7 @@ for ticker in tickerSet:
         #get ticker data
         data_retriever.getDataset(start,end,interval,ticker)
 
+#get the daily interval data
 # for ticker in tickerSet:
 #     if ticker != 'Ticker' or ticker != 'Index':
 #         print('current ticker: ', ticker)
