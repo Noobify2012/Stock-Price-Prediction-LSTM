@@ -38,10 +38,13 @@ for subdir, dirs, files in os.walk(directory):
             else :
                 print("daily")
 
+
             ###################
             # IMPORTING DATASET
             #dataset = pd.read_csv('apple_share_price.csv', usecols=[1,2,3,4])
             dataset = pd.read_csv(fileName, usecols=[1,2,3,4])
+            if 'weekly' in subdir:
+                dataset = dataset.dropna()
             dataset = dataset.reindex(index = dataset.index[::-1])
 
             # # CREATING OWN INDEX FOR FLEXIBILITY
