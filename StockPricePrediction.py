@@ -91,8 +91,10 @@ for subdir, dirs, files in os.walk(directory):
             #
             # # LSTM MODEL
             model = Sequential()
-            model.add(LSTM(32, input_shape=(1, step_size), return_sequences = True))
-            model.add(LSTM(16))
+            ##original 32,16,1
+            #more lstms setiings 64,32, 1
+            model.add(LSTM(64, input_shape=(1, step_size), return_sequences = True))
+            model.add(LSTM(32))
             model.add(Dense(1))
             model.add(Activation('linear'))
             #
@@ -153,9 +155,9 @@ for subdir, dirs, files in os.walk(directory):
             #need to add value of next day prediction and data
             #need to add RMSE for next days
             if 'weekly' in subdir:
-                plt.savefig(temp + '/stock-predict-charts/weekly_' + ticker + '.png')
+                plt.savefig(temp + '/stock-predict-charts/weekly_morelstms_' + ticker + '.png')
             else:
-                plt.savefig(temp + '/stock-predict-charts/daily_' + ticker + '.png')
+                plt.savefig(temp + '/stock-predict-charts/daily_morelstms_' + ticker + '.png')
             #plt.savefig(temp + '/stock-predict-charts/' + ticker + '.png')
             plt.close()
             #plt.show()
