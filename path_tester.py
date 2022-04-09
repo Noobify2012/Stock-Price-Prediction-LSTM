@@ -27,32 +27,32 @@ with open(tickerfile) as csv_file:
 print(tickerSet)
 # tickerset = pd.read_csv(tickerfile, usecols=[0,1])
 #get the weekly interval data
-for ticker in tickerSet:
-    if ticker != 'Ticker' or ticker != 'Index':
-        print('current ticker: ', ticker)
-        #ticker = 'AAPL'
-        start = '2017-4-4'
-        end = '2022-4-4'
-        interval = '1wk'
-        #get ticker data
-        data_retriever.getDataset(start,end,interval,ticker)
-
-#get the daily interval data
 # for ticker in tickerSet:
 #     if ticker != 'Ticker' or ticker != 'Index':
 #         print('current ticker: ', ticker)
 #         #ticker = 'AAPL'
 #         start = '2017-4-4'
 #         end = '2022-4-4'
-#         interval = '1d'
+#         interval = '1wk'
 #         #get ticker data
 #         data_retriever.getDataset(start,end,interval,ticker)
+
+#get the daily interval data
+for ticker in tickerSet:
+     if ticker != 'Ticker' or ticker != 'Index':
+         print('current ticker: ', ticker)
+         #ticker = 'AAPL'
+         start = '2022-4-5'
+         end = '2022-4-6'
+         interval = '1d'
+         #get ticker data
+         data_retriever.getDataset(start,end,interval,ticker)
 
 
 
 
 # assign directory
-directory = temp + '/stock_data/weekly_stock_data_4_april'
+directory = temp + '/stock_data/daily_stock_data_5_april'
 print("Directory: ", directory)
 
 # iterate over files in

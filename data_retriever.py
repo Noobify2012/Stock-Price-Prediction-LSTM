@@ -29,7 +29,7 @@ def getDataset(startDate, endDate, interval, ticker):
     #drop into 1d folder for data
     if interval == '1d':
         # assign directory
-        directory = temp + '/stock_data/daily_stock_data_4_april/'
+        directory = temp + '/stock_data/daily_stock_data_5_april/'
         print("Directory: ", directory)
         f = directory + ticker + '.csv'
         tickerDf.to_csv(f, index=True)
