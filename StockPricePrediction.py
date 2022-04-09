@@ -94,8 +94,8 @@ for subdir, dirs, files in os.walk(directory):
             ##original 32,16,1
             #more lstms setiings 64,32, 1
             #even more lstms settings 128,64,1
-            model.add(LSTM(64, input_shape=(1, step_size), return_sequences = True))
-            model.add(LSTM(32))
+            model.add(LSTM(32, input_shape=(1, step_size), return_sequences = True))
+            model.add(LSTM(16))
             model.add(Dense(1))
             model.add(Activation('linear'))
             #
@@ -152,13 +152,13 @@ for subdir, dirs, files in os.walk(directory):
             plt.xlabel('Time in Days')
             plt.ylabel('OHLC Value of ' + ticker + ' Stocks')
             props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
-            plt.annotate("Last Day Value: "+ str(round(np.ndarray.item(last_val),2)) + "\nNext Day Value: " + str(round(np.ndarray.item(last_val*next_val),2)), xy=(0.05, 0.05), xycoords='axes fraction')
+            plt.annotate("Last Day Value: "+ str(round(np.ndarray.item(last_val),2)) + "\nNext Day Value: " + str(round(np.ndarray.item(last_val*next_val),2)) + "\nTrain RMSE: " + str(trainScore) + "\nTest RMSE: " + str(testScore), xy=(0.05, 0.05), xycoords='axes fraction')
             #need to add value of next day prediction and data
             #need to add RMSE for next days
             if 'weekly' in subdir:
-                plt.savefig(temp + '/stock-predict-charts/weekly_even_morelstms_' + ticker + '.png')
+                plt.savefig(temp + '/stock-predict-charts/weekly_32_16_lstms_7_day_' + ticker + '.png')
             else:
-                plt.savefig(temp + '/stock-predict-charts/daily_even_morelstms_' + ticker + '.png')
+                plt.savefig(temp + '/stock-predict-charts/daily_32_16_lstms_7_day_' + ticker + '.png')
             #plt.savefig(temp + '/stock-predict-charts/' + ticker + '.png')
             plt.close()
             #plt.show()
