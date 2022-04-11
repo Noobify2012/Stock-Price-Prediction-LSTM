@@ -43,3 +43,8 @@ def getDataset(startDate, endDate, interval, ticker):
     #drop into other folder
     else:
         pass
+
+def removeDumplicates(file):
+    df = pd.read_csv(file)
+    df.drop_duplicates()
+    df.to_csv(file, index=False)

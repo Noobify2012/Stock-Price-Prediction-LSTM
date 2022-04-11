@@ -52,17 +52,17 @@ def stockPrediction(fileName, top, date, ticker):
     HLC_avg = dataset[['High', 'Low', 'Close']].mean(axis=1)
     close_val = dataset[['Close']].mean(axis=1)
     #
-    # # PLOTTING ALL INDICATORS IN ONE PLOT
-    plt.plot(obs, OHLC_avg, 'r', label='OHLC avg')
-    plt.plot(obs, HLC_avg, 'b', label='HLC avg')
-    plt.plot(obs, close_val, 'g', label='Closing price')
-    plt.legend(loc='upper left')
-    if 'weekly' in subdir:
-        plt.savefig(temp + '/stock-data-charts/weekly_' + ticker + '.png')
-    else:
-        plt.savefig(temp + '/stock-data-charts/daily_' + ticker + '.png')
-    # plt.show()
-    plt.close()
+    # # # PLOTTING ALL INDICATORS IN ONE PLOT
+    # plt.plot(obs, OHLC_avg, 'r', label='OHLC avg')
+    # plt.plot(obs, HLC_avg, 'b', label='HLC avg')
+    # plt.plot(obs, close_val, 'g', label='Closing price')
+    # plt.legend(loc='upper left')
+    # if 'weekly' in subdir:
+    #     plt.savefig(temp + '/stock-data-charts/weekly_' + ticker + '.png')
+    # else:
+    #     plt.savefig(temp + '/stock-data-charts/daily_' + ticker + '.png')
+    # # plt.show()
+    # plt.close()
     #
     # PREPARATION OF TIME SERIES DATASET
     # len of OHLC_avg is the number of data points
@@ -142,26 +142,27 @@ def stockPrediction(fileName, top, date, ticker):
     # need to substitue np.asscalar for this numpy.ndarray.item()
     # print np.append(last_val, next_val)
 
-     # PLOT OF MAIN OHLC VALUES, TRAIN PREDICTIONS AND TEST PREDICTIONS
-    plt.plot(OHLC_avg, 'g', label = 'original dataset')
-    plt.plot(trainPredictPlot, 'r', label = 'training set')
-    plt.plot(testPredictPlot, 'b', label = 'predicted stock price/test set')
-    plt.legend(loc = 'upper left')
-    plt.xlabel('Time in Days')
-    plt.ylabel('OHLC Value of ' + ticker + ' Stocks')
-    props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
-    plt.annotate("Last Day Value: "+ str(round(np.ndarray.item(last_val),2)) + "\nNext Day Value: " + str(round(np.ndarray.item(last_val*next_val),2)) + "\nTrain RMSE: " + str(trainScore) + "\nTest RMSE: " + str(testScore), xy=(0.05, 0.05), xycoords='axes fraction')
-    #need to add value of next day prediction and data
-    #need to add RMSE for next days
-    if 'weekly' in subdir:
-        plt.savefig(temp + '/stock-predict-charts/weekly_'+ str(top) +'_lstms_'+ str(date) +'_day_' + ticker + '.png')
-    else:
-        plt.savefig(temp + '/stock-predict-charts/daily_'+ str(top) +'_lstms_'+ str(date) +'_day_' + ticker + '.png')
-    #plt.savefig(temp + '/stock-predict-charts/' + ticker + '.png')
-    plt.close()
+    #  # PLOT OF MAIN OHLC VALUES, TRAIN PREDICTIONS AND TEST PREDICTIONS
+    # plt.plot(OHLC_avg, 'g', label = 'original dataset')
+    # plt.plot(trainPredictPlot, 'r', label = 'training set')
+    # plt.plot(testPredictPlot, 'b', label = 'predicted stock price/test set')
+    # plt.legend(loc = 'upper left')
+    # plt.xlabel('Time in Days')
+    # plt.ylabel('OHLC Value of ' + ticker + ' Stocks')
+    # props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
+    # plt.annotate("Last Day Value: "+ str(round(np.ndarray.item(last_val),2)) + "\nNext Day Value: " + str(round(np.ndarray.item(last_val*next_val),2)) + "\nTrain RMSE: " + str(trainScore) + "\nTest RMSE: " + str(testScore), xy=(0.05, 0.05), xycoords='axes fraction')
+    # #need to add value of next day prediction and data
+    # #need to add RMSE for next days
+    # if 'weekly' in subdir:
+    #     plt.savefig(temp + '/stock-predict-charts/weekly_'+ str(top) +'_lstms_'+ str(date) +'_day_' + ticker + '.png')
+    # else:
+    #     plt.savefig(temp + '/stock-predict-charts/daily_'+ str(top) +'_lstms_'+ str(date) +'_day_' + ticker + '.png')
+    # #plt.savefig(temp + '/stock-predict-charts/' + ticker + '.png')
+    # plt.close()
     # Ticker,NumDays,LSTMTopLayer,TrainingRMSE,TestRMSE
+
     row_contents = [ticker, date, top, trainScore, testScore, np.ndarray.item(last_val),
-                    np.ndarray.item(last_val * next_val)]
+                    np.ndarray.item(last_val * next_val), fileName]
     # Append a list as new line to an old csv file
     append_list_as_row('RMSE_data.csv', row_contents)
     # plt.show()
@@ -177,20 +178,21 @@ for subdir, dirs, files in os.walk(directory):
             stock = file
             fileName = os.path.join(subdir, file)
             ticker = stock.strip('.csv')
-            if 'weekly' in subdir:
-                pass
-                # print("weekly")
-                # topLayer = [32, 64]
-                # dateList = [7]
-                topLayer =[]
-                dateList = []
-            else :
-                print("daily")
-                topLayer = [32, 64]
-                dateList = [3, 7]
-            for top in topLayer:
-                for date in dateList:
-                    print ("Value of top: ", top)
-                    print("Value of date: ", date)
-                    print("ticker: ", ticker)
-                    stockPrediction(fileName, top, date, ticker)
+            if ticker == "PFE" or ticker == "DAL" or ticker == "AAPL" or ticker == "JNJ":
+                if 'weekly' in subdir:
+                    pass
+                    print("weekly")
+                    topLayer = [32, 64]
+                    dateList = [7]
+                    topLayer = []
+                    dateList = []
+                else :
+                    print("daily")
+                    topLayer = [32, 64]
+                    dateList = [3, 7]
+                for top in topLayer:
+                    for date in dateList:
+                        print ("Value of top: ", top)
+                        print("Value of date: ", date)
+                        print("ticker: ", ticker)
+                        stockPrediction(fileName, top, date, ticker)
