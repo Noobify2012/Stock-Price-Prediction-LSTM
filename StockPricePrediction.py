@@ -185,9 +185,9 @@ for subdir, dirs, files in os.walk(directory):
                 dateList = [3]
             else :
                 pass
-                # print("daily")
-                # topLayer = [32, 64]
-                # dateList = [3, 7]
+                print("daily")
+                topLayer = [32, 64]
+                dateList = [3, 7]
             for top in topLayer:
                 for date in dateList:
                     print ("Value of top: ", top)
