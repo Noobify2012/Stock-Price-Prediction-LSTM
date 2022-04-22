@@ -52,7 +52,7 @@ for ticker in tickerSet:
 
 
 # assign directory
-directory = temp + '/stock_data/daily_stock_data_5_april'
+directory = temp + '/stock_data/daily_stock_data_4_april'
 print("Directory: ", directory)
 
 # iterate over files in

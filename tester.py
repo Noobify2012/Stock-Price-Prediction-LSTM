@@ -14,10 +14,12 @@ print("Value of temp: ", temp)
 directory = temp + '/stock_data/daily_stock_data_4_april'
 print("Directory: ", directory)
 
+data_retriever.sortData(directory)
+
 # iterate over files in
 # that directory
-for filename in os.listdir(directory):
-    ticker = filename.strip('.csv')
-    with open('ticker_list.csv', 'a') as fd:
-        fd.write(ticker + ',\n')
-    print(ticker)
+# for filename in os.listdir(directory):
+#     ticker = filename.strip('.csv')
+#     with open('ticker_list.csv', 'a') as fd:
+#         fd.write(ticker + ',\n')
+#     print(ticker)
