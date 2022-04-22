@@ -180,17 +180,17 @@ for subdir, dirs, files in os.walk(directory):
             ticker = stock.strip('.csv')
             # if ticker == "PFE" or ticker == "DAL" or ticker == "AAPL" or ticker == "JNJ":
             if 'weekly' in subdir:
-                print("weekly")
-                topLayer = [32, 64]
-                dateList = [3]
-            else :
                 pass
+                # print("weekly")
+                # topLayer = [32, 64]
+                # dateList = [3]
+            else :
                 print("daily")
                 topLayer = [32, 64]
                 dateList = [3, 7]
-            for top in topLayer:
-                for date in dateList:
-                    print ("Value of top: ", top)
-                    print("Value of date: ", date)
-                    print("ticker: ", ticker)
-                    stockPrediction(fileName, top, date, ticker)
+                for top in topLayer:
+                    for date in dateList:
+                        print ("Value of top: ", top)
+                        print("Value of date: ", date)
+                        print("ticker: ", ticker)
+                        stockPrediction(fileName, top, date, ticker)
