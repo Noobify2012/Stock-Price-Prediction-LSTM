@@ -72,9 +72,9 @@ def stockPrediction(fileName, top, date, ticker):
     #
 
     # TRAIN-TEST SPLIT
-    # train_OHLC = int(len(OHLC_avg) * 0.75)
+    train_OHLC = int(len(OHLC_avg) * 0.75)
     # train up until the last week of the test data
-    train_OHLC = int(len(OHLC_avg) - date)
+    # train_OHLC = int(len(OHLC_avg) - date)
     test_OHLC = len(OHLC_avg) - train_OHLC
     train_OHLC, test_OHLC = OHLC_avg[0:train_OHLC, :], OHLC_avg[train_OHLC:len(OHLC_avg), :]
     #
@@ -154,18 +154,22 @@ def stockPrediction(fileName, top, date, ticker):
     #need to add value of next day prediction and data
     #need to add RMSE for next days
     if 'weekly' in subdir:
-        plt.savefig(temp + '/stock-predict-charts/weekly_'+ str(top) +'_lstms_'+ str(date) +'_day_' + ticker + '.png')
+        plt.savefig(temp + '/stock-predict-charts/weekly_75per'+ str(top) +'_lstms_'+ str(date) +'_day_' + ticker + '.png')
     else:
-        plt.savefig(temp + '/stock-predict-charts/daily_'+ str(top) +'_lstms_'+ str(date) +'_day_' + ticker + '.png')
+        plt.savefig(temp + '/stock-predict-charts/daily_75per'+ str(top) +'_lstms_'+ str(date) +'_day_' + ticker + '.png')
     #plt.savefig(temp + '/stock-predict-charts/' + ticker + '.png')
     plt.close()
     # Ticker,NumDays,LSTMTopLayer,TrainingRMSE,TestRMSE
 
-    row_contents = [ticker, date, top, trainScore, testScore, np.ndarray.item(last_val),
+    row_contents = [ticker, "75", top, trainScore, testScore, np.ndarray.item(last_val),
                     np.ndarray.item(last_val * next_val), fileName]
     # Append a list as new line to an old csv file
     append_list_as_row('RMSE_data.csv', row_contents)
     # plt.show()
+
+    ################clear variables to save memory#####################################
+    del dataset, train_OHLC, test_OHLC, testX, testY, last_val, next_val, testPredict, testPredictPlot, model
+
 
 
 
@@ -180,14 +184,19 @@ for subdir, dirs, files in os.walk(directory):
             ticker = stock.strip('.csv')
             # if ticker == "PFE" or ticker == "DAL" or ticker == "AAPL" or ticker == "JNJ":
             if 'weekly' in subdir:
-                pass
-                # print("weekly")
-                # topLayer = [32, 64]
-                # dateList = [3]
+                print("weekly")
+                topLayer = [64]
+                dateList = [7]
+                for top in topLayer:
+                    for date in dateList:
+                        print ("Value of top: ", top)
+                        print("Value of date: ", date)
+                        print("ticker: ", ticker)
+                        stockPrediction(fileName, top, date, ticker)
             else :
                 print("daily")
-                topLayer = [32, 64]
-                dateList = [3, 7]
+                topLayer = [64]
+                dateList = [3]
                 for top in topLayer:
                     for date in dateList:
                         print ("Value of top: ", top)
