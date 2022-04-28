@@ -41,4 +41,8 @@ Finally, we established that between two configurations of the networks (64 LSTM
 Overall, we learned of the unique capabilities of LSTM networks to learn from time-series data and predict values in the future. Through our experiments, we were able to see the effects of increasing the numbers of LSTM units in our RNNs and how we could feed these networks data to opti-mize their predictive capabilities. We also learned a great deal about how time-series data gets handled with gaps in data between model learning and prediction. In this, we were able to determine that these gaps are processed in a more in-depth manner with more LSTMs and our results show models trained with larger gaps are more accurately trained and with less error with more LSTMS. We also learned about how to design LSTM networks with time-series data in mind and how to prepare the data they would use. Another important thing we learned is how data fre-quency and learning can affect model accuracy/error in the scope of time-series data, and how these can lead to huge differences in prediction.
 All in all, our experiments to predict stock prices were successful and we noticed meaningful trends within our dataset.
 
-
+# How to Run the code
+1) List the stock symbols/tickers in ticker_list.csv ensuring that you give each ticker an index with a comma separating the index and the symbol.
+2) Set the start date, end date, and data interval in path_tester.py and run it. This uses data_retriever to get the stock tickers from ticker_list.csv and then retrieve the associated data from yahoo finance and puts them into separate csvs for each ticker.   
+3) Run deDup.py and tester.py to ensure that there is no duplicate data in the dataset and that the data is in the proper order.
+4) Set the parameters that you would like for LSTM layers and run StockPricePrediction.py
