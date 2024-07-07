@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import os
 import matplotlib.pyplot as plt
+from multiprocessing import Process
 from datetime import datetime
 todays_date = datetime.today().strftime('%Y-%m-%d')
 
@@ -21,7 +22,11 @@ def getTickerData(tickers: dict) -> dict:
     try:
         data = {ticker: yf.download(ticker, period='2y') for ticker in tickers}
     except:
+        # data = {ticker: yf.download(ticker, period='max') for ticker in tickers}
         pass
+        # print(ticker)
+        # import sys
+        # sys.exit(0)
     return data
 
 def plotCrossingTickers(tickerLis: dict):
@@ -65,57 +70,74 @@ def plotCrossingTickers(tickerLis: dict):
     # plt.savefig("simplefinance.png", dpi=200)
     # plt.show()
 
+if __name__ == '__main__':
+    with open(tickerfile, 'r') as tickers:
+        # print("How many tickers do we have: %s " % len(tickers.readlines()))
+        # for ticker in tickers:
+        #     print("current ticker: %s" % ticker)
+        # p = Process(target=getTickerData, args=(tickers,))
+        # p.start()
+        # p.join()
+        data = getTickerData(tickers)
+        # data = {ticker: yf.download(ticker, period='2y') for ticker in tickers}
+        
 
-with open(tickerfile, 'r') as tickers:
-    # print("How many tickers do we have: %s " % len(tickers.readlines()))
-    # for ticker in tickers:
-    #     print("current ticker: %s" % ticker)
-    data = getTickerData(tickers)
+
+
     # data = {ticker: yf.download(ticker, period='2y') for ticker in tickers}
-    
+
+        tickerLis = []
+        years = 2
+        for (ticker, df) in data.items():
+            df['50_MA'] = df['Close'].rolling(window=50).mean()
+            df['200_MA'] = df['Close'].rolling(window=200).mean()
+            df['20_MA'] = df['Close'].rolling(window=20).mean()
+            # df['MAX'] = df['Close'].rolling(window=years*365).mean()
+            print("Next Ticker to process: %s, size of df: %s" % (ticker, str(df.shape)))
+            if int(df.shape[0]) > 0:
+                start_data = df['Close'][0]
+                try:
+                    mid_data = df['Close'][int(int(df.shape[0])/2)]
+                except: 
+                    pass
+                end_data = df['Close'][int(df.shape[0])-1]
+                try:
+                    # print("DF 200 iloc[-1]: %s" % float(df['200_MA'].iloc[-1]))
+                    # print("DF 50 iloc[-1]: %s" % float(df['50_MA'].iloc[-1]))
+                    # print("DF 200 iloc[-1] - DF 50: %s" % (float(df['200_MA'].iloc[-1]) - float(df['50_MA'].iloc[-1])))
+                    
+                    cross_val = int(float(df['200_MA'].iloc[-1]) - float(df['50_MA'].iloc[-1]))
+                    recent_trend_val = int(float(df['50_MA'].iloc[-1]) - float(df['20_MA'].iloc[-1]))
+                    one_year_trend = mid_data - start_data
+                    two_year_trend = end_data - start_data
+                    second_year_trend = end_data - mid_data
+                    
+                    print("Ticker: %s, Cross Val: %s, trend_val: %s, start_data: %s, mid_data: %s, end_data: %s" % (ticker, cross_val, recent_trend_val, start_data, mid_data, end_data))
+
+                    
+                    # print("ticker: %s, cross_val: %s" % (ticker, cross_val))
+                    cross_bool = cross_val>0
+                    # print("cross_val: %s, cross_bool: %s" % (cross_val, cross_bool))
+                    # df['200_MA'].iloc[df.shape[0]-1] - df['50_MA'].iloc[df.shape[0]-1]
+                    # if cross_bool:
+                    if cross_val > 0 and recent_trend_val < 0 and two_year_trend > 20:
+                    # and df['50_MA'].iloc[df.shape[0]-1] < df['200_MA'].iloc[df.shape[0]-1]:
+                        # print("%s is near a cross!!!!!" % ticker)
+                        tickerLis.append(ticker.strip())
+                except:
+                    pass
+                    # print("Need to debug: %s" % ticker)
+        plotCrossingTickers(tickerLis)
 
 
+    # getTickerData(tickers)
+    # print("the length of tickerList: %s " % len(tickerList))
 
-# data = {ticker: yf.download(ticker, period='2y') for ticker in tickers}
+    # fig, axes = plt.subplots(nrows=len(tickers), ncols=1, figsize=(10, 15), sharex=True)
 
-    tickerLis = []
-    for (ticker, df) in data.items():
-        df['50_MA'] = df['Close'].rolling(window=50).mean()
-        df['200_MA'] = df['Close'].rolling(window=200).mean()
-        df['20_MA'] = df['Close'].rolling(window=20).mean()
-        try:
-            # print("DF 200 iloc[-1]: %s" % float(df['200_MA'].iloc[-1]))
-            # print("DF 50 iloc[-1]: %s" % float(df['50_MA'].iloc[-1]))
-            # print("DF 200 iloc[-1] - DF 50: %s" % (float(df['200_MA'].iloc[-1]) - float(df['50_MA'].iloc[-1])))
-            
-            cross_val = int(float(df['200_MA'].iloc[-1]) - float(df['50_MA'].iloc[-1]))
-            trend_val = int(float(df['50_MA'].iloc[-1]) - float(df['20_MA'].iloc[-1]))
-            print("Ticker: %s, Cross Val: %s, trend_val: %s" % (ticker, cross_val, trend_val))
+    # ############
+    # # get tickers
 
-            
-            # print("ticker: %s, cross_val: %s" % (ticker, cross_val))
-            cross_bool = cross_val>0
-            # print("cross_val: %s, cross_bool: %s" % (cross_val, cross_bool))
-            # df['200_MA'].iloc[df.shape[0]-1] - df['50_MA'].iloc[df.shape[0]-1]
-            # if cross_bool:
-            if cross_val > 0 and trend_val < 0:
-            # and df['50_MA'].iloc[df.shape[0]-1] < df['200_MA'].iloc[df.shape[0]-1]:
-                # print("%s is near a cross!!!!!" % ticker)
-                tickerLis.append(ticker.strip())
-        except:
-            pass
-            # print("Need to debug: %s" % ticker)
-    plotCrossingTickers(tickerLis)
-
-
-# getTickerData(tickers)
-# print("the length of tickerList: %s " % len(tickerList))
-
-# fig, axes = plt.subplots(nrows=len(tickers), ncols=1, figsize=(10, 15), sharex=True)
-
-# ############
-# # get tickers
-
-# # get ticker data
-# tickerData = getTickerData
+    # # get ticker data
+    # tickerData = getTickerData
 
